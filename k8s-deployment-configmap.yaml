@@ -1,0 +1,54 @@
+# Version alternative du Deployment utilisant la ConfigMap (étape 9)
+# Ce fichier montre comment modifier le Deployment pour utiliser la ConfigMap
+# au lieu d'une valeur d'environnement directe
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-k8s-deployment
+  namespace: lab-k8s
+  labels:
+    app: demo-k8s
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: demo-k8s
+  template:
+    metadata:
+      labels:
+        app: demo-k8s
+    spec:
+      containers:
+        - name: demo-k8s-container
+          image: demo-k8s:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          
+          # Modification : utilisation de valueFrom pour lire depuis la ConfigMap
+          # Au lieu de value: "Hello from Kubernetes Deployment"
+          env:
+            - name: APP_MESSAGE
+              # Référence à la ConfigMap pour obtenir la valeur
+              valueFrom:
+                configMapKeyRef:
+                  # Nom de la ConfigMap à utiliser
+                  name: demo-k8s-config
+                  # Clé dans la ConfigMap à lire
+                  key: app.message
+          
+          readinessProbe:
+            httpGet:
+              path: /api/hello
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+

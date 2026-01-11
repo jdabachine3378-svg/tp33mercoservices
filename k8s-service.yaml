@@ -1,0 +1,33 @@
+# Manifest Kubernetes pour le Service de type NodePort
+# Un Service expose l'application à l'intérieur et à l'extérieur du cluster
+
+apiVersion: v1
+kind: Service
+metadata:
+  # Nom du Service dans Kubernetes
+  name: demo-k8s-service
+  # Namespace où créer le Service
+  namespace: lab-k8s
+  # Labels pour identifier ce service
+  labels:
+    app: demo-k8s
+spec:
+  # Type de Service : NodePort expose l'application sur un port du node
+  # Cela permet d'accéder à l'application depuis l'extérieur du cluster
+  type: NodePort
+  
+  # Sélecteur pour identifier les pods à exposer
+  # Le Service route le trafic vers les pods ayant ce label
+  selector:
+    app: demo-k8s
+  
+  ports:
+    - name: http
+      # Port du service dans le cluster (port interne)
+      port: 8080
+      # Port du conteneur vers lequel router le trafic
+      targetPort: 8080
+      # Port exposé sur le node (accessible depuis l'extérieur)
+      # Doit être entre 30000 et 32767
+      nodePort: 30080
+

@@ -1,0 +1,67 @@
+# Manifest Kubernetes pour le Deployment
+# Un Deployment gère un ensemble de pods identiques (réplicas) pour l'application
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Nom du Deployment dans Kubernetes
+  name: demo-k8s-deployment
+  # Namespace où déployer l'application
+  namespace: lab-k8s
+  # Labels pour identifier et sélectionner ce déploiement
+  labels:
+    app: demo-k8s
+spec:
+  # Nombre de réplicas (instances) de l'application à exécuter
+  replicas: 2
+  
+  # Sélecteur pour identifier les pods gérés par ce Deployment
+  selector:
+    matchLabels:
+      app: demo-k8s
+  
+  # Template pour créer les pods
+  template:
+    metadata:
+      labels:
+        app: demo-k8s
+    spec:
+      containers:
+        # Définition du conteneur
+        - name: demo-k8s-container
+          # Image Docker à utiliser (doit être disponible dans Minikube)
+          image: demo-k8s:1.0.0
+          # Politique de pull d'image : IfNotPresent utilise l'image locale si disponible
+          imagePullPolicy: IfNotPresent
+          
+          # Port exposé par le conteneur
+          ports:
+            - containerPort: 8080
+          
+          # Variables d'environnement injectées dans le conteneur
+          # Ces variables peuvent être lues par l'application Spring Boot
+          env:
+            - name: APP_MESSAGE
+              value: "Hello from Kubernetes Deployment"
+          
+          # Readiness Probe : vérifie si le pod est prêt à recevoir du trafic
+          # Si la probe échoue, le pod n'est pas inclus dans le Service
+          readinessProbe:
+            httpGet:
+              path: /api/hello
+              port: 8080
+            # Délai initial avant de commencer les vérifications (en secondes)
+            initialDelaySeconds: 10
+            # Intervalle entre les vérifications (en secondes)
+            periodSeconds: 5
+          
+          # Liveness Probe : vérifie si le conteneur est toujours en vie
+          # Si la probe échoue, Kubernetes redémarre le conteneur
+          # Note : nécessite spring-boot-starter-actuator pour /actuator/health
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+

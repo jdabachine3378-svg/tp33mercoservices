@@ -1,0 +1,16 @@
+# Manifest Kubernetes pour la ConfigMap (optionnel - étape 9)
+# Une ConfigMap permet de stocker des données de configuration non sensibles
+# et de les injecter dans les pods comme variables d'environnement ou fichiers
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # Nom de la ConfigMap
+  name: demo-k8s-config
+  # Namespace où créer la ConfigMap
+  namespace: lab-k8s
+data:
+  # Clé-valeur de configuration
+  # Cette valeur sera injectée dans le pod via une variable d'environnement
+  app.message: "Hello from ConfigMap in Kubernetes"
+
