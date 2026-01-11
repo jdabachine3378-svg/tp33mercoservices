@@ -2,7 +2,7 @@
 
 Ce TP vous guide à travers le processus de conteneurisation et de déploiement d'une application Spring Boot sur un cluster Kubernetes local (Minikube).
 
-## 📋 Objectifs pédagogiques
+##  Objectifs pédagogiques
 
 À la fin de ce lab, l'étudiant est capable de :
 
@@ -12,13 +12,13 @@ Ce TP vous guide à travers le processus de conteneurisation et de déploiement 
 4. Exposer l'API Spring Boot vers l'extérieur du cluster
 5. Vérifier le fonctionnement et observer les pods
 
-## 🎯 Scénario
+##  Scénario
 
 Une petite API REST Spring Boot expose un endpoint `/api/hello` qui retourne un message JSON.
 
 **Objectif :** déployer cette API sur Kubernetes et l'exposer via un Service de type NodePort.
 
-## ✅ Pré-requis techniques
+##  Pré-requis techniques
 
 - Java 17 ou 21 installé
 - Maven installé
@@ -30,7 +30,7 @@ Les exemples ci-dessous utilisent Minikube.
 
 ---
 
-## 📚 Étapes du TP
+##  Étapes du TP
 
 ### Étape 1 - Création d'un petit projet Spring Boot
 
@@ -496,7 +496,7 @@ minikube service list
 
 ---
 
-## 🐛 Dépannage
+##  Dépannage
 
 ### Les pods ne démarrent pas
 
@@ -517,23 +517,5 @@ L'image n'est pas trouvée. Vérifier que vous avez construit l'image dans l'env
 
 ---
 
-## 📝 Notes
 
-- Le port NodePort doit être entre 30000 et 32767
-- Les health checks (readiness/liveness probes) sont importants pour la stabilité de l'application
-- La ConfigMap permet de séparer la configuration du code
-- Pour la production, utilisez un registre Docker (Docker Hub, ECR, GCR, etc.) au lieu d'images locales
-
----
-
-## 📚 Ressources supplémentaires
-
-- [Documentation Kubernetes](https://kubernetes.io/docs/)
-- [Documentation Spring Boot](https://spring.io/projects/spring-boot)
-- [Documentation Docker](https://docs.docker.com/)
-- [Documentation Minikube](https://minikube.sigs.k8s.io/docs/)
-
----
-
-**Bon TP ! 🚀**
 
